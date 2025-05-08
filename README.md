@@ -54,5 +54,9 @@ prediction_notes/
 - Tests unitaires avec Pytest
 
 ---
+Auteure
 
+    Math SOCE
+    Kadidja GUEBEDIANG A NKEN
+    Projet réalisé dans le cadre d'un apprentissage en Data Science & Machine Learning
 
