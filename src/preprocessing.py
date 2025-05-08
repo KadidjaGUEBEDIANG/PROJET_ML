@@ -1,3 +1,7 @@
+base_url= "https://github.com/KadidjaGUEBEDIANG/project-machine-learning-student-performance/raw/main/StudentPerformanceFactors.xlsx"#les données sont disponibles sur github dans le compte kadidjaGUEBEDIANG 
+base= pd.read_excel(base_url, engine="openpyxl")#la variable base contient notre base de donnée
+X = base.drop(columns=['Exam_Score'])  
+y = base.Exam_Score
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, OrdinalEncoder
