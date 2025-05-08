@@ -55,10 +55,4 @@ prediction_notes/
 
 ---
 
-## ✅ Lancer le projet
 
-1. **Cloner le dépôt :**
-
-```bash
-git clone https://github.com/KadidjaGUEBEDIANG/prediction_notes.git
-cd prediction_notes
