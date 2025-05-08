@@ -1,44 +1,37 @@
-# src/evaluation.py
-import numpy as np
-from sklearn import metrics
+# test/test_evaluation.py
 
-def evaluate_model(y_true, y_pred):
-    """
-    Calcule les principaux indicateurs d’évaluation d’un modèle de régression.
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from evaluation import evaluate_model, print_evaluation
+from preprocessing import get_preprocessor  
+from sklearn.pipeline import Pipeline
 
-    Paramètres:
-    -----------
-    y_true : array-like
-        Valeurs réelles de la variable cible.
-    y_pred : array-like
-        Prédictions du modèle.
 
-    Retourne:
-    ---------
-    dict
-        Dictionnaire contenant MAE, MAPE, MSE, RMSE, R2.
-    """
-    results = {
-        'MAE': metrics.mean_absolute_error(y_true, y_pred),
-        'MAPE': metrics.mean_absolute_percentage_error(y_true, y_pred) * 100,
-        'MSE': metrics.mean_squared_error(y_true, y_pred),
-        'RMSE': np.sqrt(metrics.mean_squared_error(y_true, y_pred)),
-        'R2': metrics.r2_score(y_true, y_pred) * 100
-    }
-    return results
+# Chargement des données
+base_url = "https://github.com/KadidjaGUEBEDIANG/project-machine-learning-student-performance/raw/main/StudentPerformanceFactors.xlsx"
+base = pd.read_excel(base_url, engine="openpyxl")
 
-def print_evaluation(results):
-    """
-    Affiche les résultats d’évaluation sous forme lisible.
-    
-    Paramètres:
-    -----------
-    results : dict
-        Dictionnaire contenant les métriques calculées.
-    """
-    print("\n=== Performance du modèle ===")
-    print(f"- MAE (Erreur Absolue Moyenne): {results['MAE']:.2f}")
-    print(f"- MAPE (Erreur Pourcentage Absolue Moyenne): {results['MAPE']:.2f}%")
-    print(f"- MSE (Erreur Quadratique Moyenne): {results['MSE']:.2f}")
-    print(f"- RMSE (Racine de l'Erreur Quadratique Moyenne): {results['RMSE']:.2f}")
-    print(f"- R² (Coefficient de Détermination): {results['R2']:.2f}%")
+X = base.drop(columns=['Exam_Score'])
+y = base['Exam_Score']
+
+# Split des données
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Construction du pipeline avec preprocessing + modèle
+preprocessor = get_preprocessor()
+model = Pipeline([
+    ('preprocessing', preprocessor),
+    ('regressor', LinearRegression())
+])
+
+# Entraînement
+model.fit(X_train, y_train)
+
+# Prédictions
+y_pred = model.predict(X_test)
+
+# Évaluation
+results = evaluate_model(y_test, y_pred)
+print_evaluation(results)
+
